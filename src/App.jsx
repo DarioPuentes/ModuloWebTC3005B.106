@@ -7,7 +7,7 @@ import Admin from './views/Admin'
 import ResponsiveAppBar from './components/AppBar'
 import { Container } from '@mui/material'
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://apiresttc3005b106-production.up.railway.app";
 
 function App() {
   const [isLogin, setIsLogin] = useState(() => {
@@ -17,14 +17,14 @@ function App() {
   useEffect(() => {
     localStorage.setItem('isLogin', JSON.stringify(isLogin));
   }, [isLogin]);
-
+  const [token, setToken] = useState("");
   const [user, setUser] = useState({});
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (isLogin) {
       const getUsers = async () => {
-        const res = await fetch(`${API_URL}/users`);
+        const res = await fetch(`${API_URL}/users`,{headers: { Authorization: token}});
         const data = await res.json();
         setUsers(data);
       };
@@ -40,6 +40,9 @@ function App() {
         body: JSON.stringify(userData)
       });
       const result = await response.json();
+      setIsLogin(result.login);
+      setUser(result.user);
+      setToken(result.token);
       return result;
     } catch (error) {
       console.error("Error during login:", error);
@@ -49,14 +52,14 @@ function App() {
 
   const delUser = async (id) => {
     setUsers(users.filter((u) => u._id !== id));
-    await fetch(`${API_URL}/users/${id}`, {method: "delete"});
+    await fetch(`${API_URL}/users/${id}`, {headers: { Authorization: token }, method: "delete"});
   };
 
   const addUser = async (newUser) => {
     try {
       const res = await fetch(`${API_URL}/users`, {
         method: 'POST',
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", Authorization: token },
         body: JSON.stringify(newUser)
       });
       
@@ -65,7 +68,7 @@ function App() {
         setUsers([...users, data]);
       } else {
         console.error("Error desde el backend:", data);
-        alert("No se pudo registrar. ¿Quizás el usuario ya existe?");
+        alert("No se pudo registrar al usuario");
       }
     } catch (error) {
       console.error("Error en la petición de registro:", error);
