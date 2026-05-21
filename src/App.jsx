@@ -12,25 +12,46 @@ const API_URL = "https://apiresttc3005b106-production.up.railway.app";
 function App() {
   const [isLogin, setIsLogin] = useState(() => {
     const saved = localStorage.getItem('isLogin');
-    return saved ? JSON.parse(saved) : false;
+    if (saved && saved !== "undefined") {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Error parseando isLogin desde localStorage, reseteando...", e);
+        localStorage.removeItem('isLogin');
+        return false;
+      }
+    }
+    return false;
   });
-  useEffect(() => {
-    localStorage.setItem('isLogin', JSON.stringify(isLogin));
-  }, [isLogin]);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token') || "";
+  });
   const [user, setUser] = useState({});
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (isLogin) {
-      const getUsers = async () => {
-        const res = await fetch(`${API_URL}/users`,{headers: { Authorization: token}});
-        const data = await res.json();
-        setUsers(data);
-      };
-      getUsers();
-    }
-  }, [isLogin]);
+    localStorage.setItem('isLogin', JSON.stringify(isLogin));
+    localStorage.setItem('token', token);
+  }, [isLogin, token]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      if (isLogin && token) {
+        try {
+          const res = await fetch(`${API_URL}/users`, {
+            headers: { 
+              Authorization: `Bearer ${token}` 
+            }
+          });
+          const data = await res.json();
+          setUsers(Array.isArray(data) ? data : []);
+        } catch (error) {
+          console.error("Error obteniendo usuarios:", error);
+        }
+      }
+    };
+    getUsers();
+  }, [isLogin, token]);
 
   const login = async (userData) => {
     try {
@@ -40,10 +61,16 @@ function App() {
         body: JSON.stringify(userData)
       });
       const result = await response.json();
-      setIsLogin(result.login);
-      setUser(result.user);
-      setToken(result.token);
-      return result;
+      
+      if (result.isLogin) {
+        setIsLogin(true);
+        setUser(result.user);
+        setToken(result.token);
+        return result;
+      } else {
+        alert(result.msg || "Credenciales incorrectas");
+        return result;
+      }
     } catch (error) {
       console.error("Error during login:", error);
       throw error;
@@ -52,14 +79,20 @@ function App() {
 
   const delUser = async (id) => {
     setUsers(users.filter((u) => u._id !== id));
-    await fetch(`${API_URL}/users/${id}`, {headers: { Authorization: token }, method: "delete"});
+    await fetch(`${API_URL}/users/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }, 
+      method: "delete"
+    });
   };
 
   const addUser = async (newUser) => {
     try {
       const res = await fetch(`${API_URL}/users`, {
         method: 'POST',
-        headers: { "content-type": "application/json", Authorization: token },
+        headers: { 
+          "content-type": "application/json", 
+          Authorization: `Bearer ${token}` 
+        },
         body: JSON.stringify(newUser)
       });
       
