@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, TextField, Button, Typography, Paper, Checkbox, FormControlLabel, Alert } from '@mui/material'; 
+import { Box, TextField, Button, Typography, Paper, Alert } from '@mui/material'; 
 import { Link, useNavigate } from 'react-router-dom';
 import reactImg from '../assets/hero.png';
 
@@ -78,9 +78,7 @@ const Login = ({ setIsLogin, login }) => {
                         onChange={handleChange} 
                     />
                     
-                    <FormControlLabel control={<Checkbox defaultChecked color="primary" />} label="Recordar contraseña"/> <br />
-                    
-                    <Box style={{ display: 'flex', justifyContent: 'center'}}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
                         <Button 
                             variant="contained" 
                             color="primary" 
@@ -91,7 +89,7 @@ const Login = ({ setIsLogin, login }) => {
                             INICIAR SESION 
                         </Button>
                     </Box>
-                    <Typography variant="body2" align="center"> ¿No tienes cuenta? <Link to="/register"> Registrarse </Link> </Typography>
+                    <Typography variant="body2" align="center"> ¿No tienes cuenta? <Link to="/"> Registrarse </Link> </Typography>
                 </Paper>
             </Box>
         </Box>

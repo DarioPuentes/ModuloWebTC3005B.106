@@ -20,8 +20,8 @@ const Admin = ({ users, delUser, addUser }) => {
                         <TableRow>
                             <TableCell sx={{ fontWeight: 'bold' }}>ID</TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>Nombre</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold' }}>Email</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold' }} align="center">Acción</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Correo</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }} align="center">Eliminar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

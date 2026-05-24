@@ -36,7 +36,7 @@ const Add = ({ addUser }) => {
                 <TextField 
                     value={username} 
                     onChange={(e) => setUsername(e.target.value)} 
-                    label="Email" 
+                    label="Correo" 
                     variant="outlined" 
                     size="small"
                     fullWidth

@@ -21,7 +21,7 @@ export default function ButtonAppBar() {
           >
           </IconButton>
           <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Web A4 Login React conectado a Rest API
+            Web A8 - Práctica Deploy
           </Typography>
           <Button color="inherit" component={Link} to="/">
             <Box component="img" src={logoutImg} alt="Cerrar Sesión" sx={{ height: 40, filter: 'brightness(0) invert(1)' }} />
