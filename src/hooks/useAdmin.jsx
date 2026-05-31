@@ -5,11 +5,6 @@ const API_URL = "https://apiresttc3005b106-production.up.railway.app";
 const useAdmin = (token, isLogin) => {
     const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        localStorage.setItem('isLogin', JSON.stringify(isLogin));
-        localStorage.setItem('token', token);
-    }, [isLogin, token]);
-
     const getUsers = async () => {
         if (isLogin && token) {
             const res = await fetch(`${API_URL}/users`, {headers: { Authorization: `Bearer ${token}` }});
@@ -19,10 +14,10 @@ const useAdmin = (token, isLogin) => {
     };
 
     useEffect(() => {
-        if (token) {
+        if (token && isLogin) {
             getUsers();
         }
-    }, [token]);
+    }, [token, isLogin]);
 
     const delUser = async (id) => {
         setUsers(users.filter((u) => u._id !== id));

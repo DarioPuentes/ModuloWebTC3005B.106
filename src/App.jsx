@@ -11,7 +11,7 @@ import useAdmin from './hooks/useAdmin'
 
 function App() {
   const { isLogin, setIsLogin, token, login, user } = useAuth();
-  const { users, getUsers, delUser, addUser } = useAdmin(token);
+  const { users, getUsers, delUser, addUser } = useAdmin(token, isLogin);
 
   return (
     <>
@@ -22,7 +22,7 @@ function App() {
             <Route path="/" element={<Login setIsLogin={setIsLogin} login={login} />} />
             {/* <Route path="/prof" element={<Profile user={user} />} /> */}
             <Route path="/admin" element={<Admin users={users} delUser={delUser} addUser={addUser} />} />
-            <Route path='/users/:username' element={<Details users={users}/>} />
+            <Route path='/users/:id' element={<Details users={users}/>} />
           </Routes> 
         </Container>
       </BrowserRouter>
