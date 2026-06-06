@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Container } from '@mui/material'
 import './App.css'
@@ -5,6 +6,7 @@ import Login from './views/Login'
 import Profile from './views/Profile'
 import Admin from './views/Admin'
 import Details from './components/Details'
+import LifeCycle from './components/LifeCycle'
 import ResponsiveAppBar from './components/AppBar'
 import useAuth from './hooks/useAuth'
 import useAdmin from './hooks/useAdmin'
@@ -12,6 +14,13 @@ import useAdmin from './hooks/useAdmin'
 function App() {
   const { isLogin, setIsLogin, token, login, user } = useAuth();
   const { users, getUsers, delUser, addUser } = useAdmin(token, isLogin);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+      if (token && isLogin) {
+          getUsers();
+      }
+  }, [token, isLogin]);
 
   return (
     <>
@@ -26,6 +35,8 @@ function App() {
           </Routes> 
         </Container>
       </BrowserRouter>
+      <button onClick={() => setShow(!show)}>Toggle LifeCycle</button>
+      {show && <LifeCycle />}
     </>
   )
 }
